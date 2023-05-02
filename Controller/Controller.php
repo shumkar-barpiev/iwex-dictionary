@@ -1,37 +1,45 @@
 <?php
+session_start();
 /**
  * Controller
  */
 
 class Controller
 {
-  public function select_page($view)
+  public function select_page($view, $model)
   {
     if(isset($_GET['page'])){
       switch ($_GET['page']) {
-        case 'products':
-          global $users;
+        case 'admin':
+          $e = $_POST['email'];
+          $p = $_POST['password'];
 
-          foreach($users as $user){
-            echo $user. "<br>";
+          if(isset($_SESSION['id']) && isset($_SESSION['email']) && isset ($_SESSION['password'])){
+            $view->adminPanel();
+          }else{
+            if (isset($e) &&  isset($p)) {
+
+              $admin = $model->getAdminByEmailAndPassword($e, $p);
+
+              if (is_null($admin->getId())) {
+                $view->loginPanel(true);
+              }else{
+                $_SESSION["id"] = $admin->getId();
+                $_SESSION["email"] = $admin->getEmail();
+                $_SESSION["password"] = $admin->getPassword();
+
+                $view->adminPanel();
+              }
+            }else{
+              $view->loginPanel(false);
+            }
           }
+        break;
+        case 'logout':
+          session_unset();
+          $view->loginPanel(false);
+        break;
 
-          break;
-        case 'about':
-          $view->about();
-          break;
-        case 'services':
-          $view->services();
-          break;
-        case 'portfolio':
-          $view->portfolio();
-          break;
-        case 'login':
-          $view->login();
-          break;
-        case 'registration':
-          $view->register();
-          break;
         case 'profile':
           $fullname = $_POST['fullname'];
           $gender = $_POST['gender'];

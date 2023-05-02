@@ -4,6 +4,20 @@
 			$this->importHead();
 ?>
 
+	<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-md-3 col-lg-3 me-0 px-3 fs-6" href="index.php">
+			<img src="./View/Template/assets/images/icon.png" style="width: 120px;">
+		</a>
+		<button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<input class="form-control form-control-light w-100 rounded-0 border-0" type="text" placeholder="Search the German Word " aria-label="Search">
+		<div class="navbar-nav">
+			<div class="nav-item text-nowrap">
+				<button class="nav-link px-3" type="button" style="color: #ffcc00">Search</button>
+			</div>
+		</div>
+	</header>
 
 	<div class="container-fluid">
 		<div class="row">
@@ -20,7 +34,7 @@
 						style="padding-right: 5px;">
 							<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
 							<path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-						</svg>Содержание :
+						</svg>Содержание
 
 					</h4>
 					<ul class="nav flex-column mb-2">
@@ -70,12 +84,11 @@
 				</div>
 			</nav>
 
+
 			<main class="col-md-9 ms-sm-auto col-lg-9 px-md-4">
 				<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<h1 class="h2">Menu 1.1</h1>
 				</div>
-<!-- <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
-
 				<div class="card mb-3" style="max-width: 740px; margin: auto;">
 					<div class="row g-0">
 						<div class="col-md-4">
@@ -190,12 +203,68 @@
 		</div>
 	</div>
 
+<?php
+		$this->importFoot();
+	}
+		public function loginPanel($param){
+			$this->importHead();
+			if($param){
+				echo "<script>alert('There is not like this admin, please enter email or password correctly!');</script>";
+			}
+?>
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+			<a class="navbar col-md-3 col-lg-3 me-0 px-3 fs-6" href="index.php">
+				<img src="./View/Template/assets/images/icon.png" style="width: 120px;">
+			</a>
+		</header>
 
+		<div style=" padding-top: 180px;" >
+			<form class="row g-2 needs-validation" style="width: 414px; margin:auto; background-color: #fc0; padding: 50px; border-radius: 25px;" action="index.php?page=admin" method="post" validate>
+				<div class="col-md-12">
+					<label for="validationCustom01" class="form-label">Email :</label>
+					<div class="input-group has-validation">
+						<input type="text" class="form-control" id="validationCustom01" name="email" placeholder="Enter the email" required>
+						<div class="invalid-feedback">
+							Please enter your email.
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<label for="validationCustom02" class="form-label">Password :</label>
+					<div class="input-group has-validation">
+						<input type="password" class="form-control" id="validationCustom02" name="password" placeholder="Password" required>
+						<div class="invalid-feedback">
+							Please enter your password.
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12" >
+					<button type="submit" class="btn btn-dark" style="width: 100%;">Login</button>
+				</div>
+			</form>
+
+		</div>
 
 
 
 <?php
 		$this->importFoot();
+	}
+
+	public function adminPanel(){
+			$this->importHead();
+			$this->importAdminNavigationBar();
+?>
+
+
+	<h1>Admin panel</h1>
+
+
+
+
+<?php
+			$this->importFoot();
 	}
 		public function importHead(){
 			include "./View/Template/Head.html";
@@ -204,5 +273,10 @@
 		public function importFoot(){
 			include "./View/Template/Footer.html";
 		}
+
+//		Admin panel
+	public function importAdminNavigationBar(){
+		include "./View/Template/adminNavBar.html";
+	}
 	}
 ?>

@@ -3,7 +3,7 @@
 		private $host = "localhost";
 		private $userName = "root";
 		private $userPass = "";
-		private $dbName = "webUME";
+		private $dbName = "iwex-dictionary";
 
 		public function getHost(){
 			return $this->host;

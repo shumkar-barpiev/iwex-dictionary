@@ -42,7 +42,7 @@ class Model{
 
 		$stmt = $this->conn -> stmt_init();
 
-		if ($stmt -> prepare("SELECT * FROM `admins` WHERE `email` = ? AND `password` = ?")) {
+		if ($stmt -> prepare("SELECT * FROM `admin` WHERE `email` = ? AND `password` = ?")) {
 			$stmt->bind_param('ss', $email, $password);
 
 			// Execute query
