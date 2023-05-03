@@ -40,29 +40,12 @@ class Controller
           $view->loginPanel(false);
         break;
 
-        case 'profile':
-          $fullname = $_POST['fullname'];
-          $gender = $_POST['gender'];
-          $softwareEngineer = $_POST['softwareEngineer'];
-          $jobTitle = $_POST['jobTitle'];
-          $technologies = $_POST['skills'];
-          $email = $_POST['email'];
-          $password = $_POST['password'];
-          $phonenumber = $_POST['phonenumber'];
-          $address = $_POST['address'];
+        case 'chapter':
+          $id = $_POST['id'];
 
-          $user = new User(
-            $fullname,
-            $gender,
-            $softwareEngineer,
-            $jobTitle,
-            $technologies,
-            $email,
-            $password,
-            $phonenumber,
-            $address);
 
-          $view->profile($user);
+
+          $view->chapterContentPage();
           break;
         default:
           $view->index();
