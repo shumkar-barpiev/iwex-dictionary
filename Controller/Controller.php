@@ -15,7 +15,7 @@ class Controller
           $p = $_POST['password'];
 
           if(isset($_SESSION['id']) && isset($_SESSION['email']) && isset ($_SESSION['password'])){
-            $view->adminPanel();
+            $view->adminPanel(false, "");
           }else{
             if (isset($e) &&  isset($p)) {
 
@@ -28,7 +28,7 @@ class Controller
                 $_SESSION["email"] = $admin->getEmail();
                 $_SESSION["password"] = $admin->getPassword();
 
-                $view->adminPanel();
+                $view->adminPanel(false, "");
               }
             }else{
               $view->loginPanel(false);
@@ -39,14 +39,98 @@ class Controller
           session_unset();
           $view->loginPanel(false);
         break;
-
         case 'chapter':
           $id = $_POST['id'];
 
-
-
           $view->chapterContentPage();
           break;
+//          CHAPTERS PART
+        case "allChapters":
+
+          $allChapters = $model->getAllChapters();
+
+          $view->allChapters($allChapters);
+          break;
+        case "createChapterForm":
+          $view->createChapterForm();
+          break;
+        case "createChapter":
+
+//          echo $_POST['chapterName'];
+//          echo "<pre>";
+//          print_r($_FILES["chapterImage"]);
+//          echo "</pre>";
+          $chapterTitle = $_POST['chapterName'];
+          $imageName = $_FILES['chapterImage']['name'];
+          $imageTmp = $_FILES['chapterImage']['tmp_name'];
+          $imageType = $_FILES['chapterImage']['type'];
+          $imageSize = $_FILES['chapterImage']['size'];
+
+          if ($imageSize > 4000000){ // surot olchomu 4 MB'tan kop bolboshu kerek
+            $warningMessage = "Size of image out of range!";
+            $view->adminPanel(true, $warningMessage);
+          }else{
+            // Check if the file is an image
+            if ($imageType == 'image/jpeg' || $imageType == 'image/png' ||  $imageType == 'image/jpg'){
+              $img_ex = pathinfo($imageName, PATHINFO_EXTENSION);
+              $img_ex_lc = strtolower($img_ex);
+
+              $new_img_name = uniqid("IMG-", true).'.'.$img_ex_lc;
+              $img_upload_path = dirname(__FILE__) . "/uploads/".$new_img_name;
+//              echo $img_upload_path;
+
+              $model->createChapter($chapterTitle, $new_img_name);
+              move_uploaded_file($imageTmp, $img_upload_path);
+
+              $warningMessage =  'Chapter created successfully!';
+              $view->adminPanel(true, $warningMessage);
+            } else {
+              $warningMessage = "Invalid file type. Please upload an image file.";
+              $view->adminPanel(true, $warningMessage);
+            }
+          }
+          break;
+        case "updateChapterView":
+          $view->updateChapter();
+          break;
+        case "updateChapter":
+          echo "update chapter";
+          $chapterId = $_POST['chapterID'];
+          echo $chapterId;
+
+
+//          $view->allChapters();
+          break;
+        case "deleteChapter":
+
+
+          $chapterId = $_POST['chapterID'];
+          echo $chapterId;
+          echo "delete the chapter";
+//          $view->index();
+          break;
+//          CHAPTERS MENU PART
+        case "allChaptersMenu":
+          echo "all chapters menu";
+          break;
+        case "createChapterMenu":
+          echo "all chapters menu";
+          break;
+//          CHAPTERS SUB MENU PART
+        case "allChaptersSubMenu":
+          echo "all chapters";
+          break;
+        case "createChapterSubMenu":
+          echo "all chapters";
+          break;
+//          WORD PART
+        case "allWords":
+          echo "all chapters";
+          break;
+        case "createWord":
+          echo "all chapters";
+          break;
+//          DEFAULT
         default:
           $view->index();
           break;

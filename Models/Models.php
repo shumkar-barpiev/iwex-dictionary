@@ -67,6 +67,87 @@ class Model{
 		}
 	}
 
+//	CHAPTER FUNCTIONS CRUD
+// Create Chapter
+	public function createChapter($chapterName, $imageUrl){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("INSERT INTO chapters (chapterName, imageUrl) VALUES (?, ?);")) {
+			$stmt->bind_param('ss', $chapterName, $imageUrl);
+
+			// Execute query
+			$stmt -> execute();
+
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+//	Get all chapters
+	public function getAllChapters(){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("SELECT * FROM `chapters`")) {
+		  // Execute query
+		  $stmt -> execute();
+
+		  // Bind result variables
+		  $stmt -> bind_result($chapterId, $chapterName, $imageUrl);
+
+			$chapters = array();
+		  // Fetch value
+			while ($stmt->fetch()) {
+				$chapters[] = new Chapter(
+					$chapterId,
+					$chapterName,
+					$imageUrl
+				);
+			}
+		  // Close statement
+		$stmt -> close();
+		$this->conn->close();
+
+		  return $chapters;
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
 	
 }
  ?>
