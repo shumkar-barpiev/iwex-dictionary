@@ -67,7 +67,53 @@ class Model{
 		}
 	}
 
-//	CHAPTER FUNCTIONS CRUD
+//	*********************** CHAPTER FUNCTIONS CRUD **********************************  //
+//	Get all chapters
+	public function getAllChapters(){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("SELECT * FROM `chapters`")) {
+			// Execute query
+			$stmt -> execute();
+
+			// Bind result variables
+			$stmt -> bind_result($chapterId, $chapterName, $imageUrl);
+
+			$chapters = array();
+			// Fetch value
+			while ($stmt->fetch()) {
+				$chapters[] = new Chapter(
+					$chapterId,
+					$chapterName,
+					$imageUrl
+				);
+			}
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+
+			return $chapters;
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
 // Create Chapter
 	public function createChapter($chapterName, $imageUrl){
 		$conf = new Config();
@@ -102,8 +148,9 @@ class Model{
 		}
 	}
 
-//	Get all chapters
-	public function getAllChapters(){
+
+// Update Chapter
+	public function updateChapter($chapterId, $chapterName, $imageUrl){
 		$conf = new Config();
 
 		$this->conn = new mysqli(
@@ -120,33 +167,60 @@ class Model{
 
 		$stmt = $this->conn -> stmt_init();
 
-		if ($stmt -> prepare("SELECT * FROM `chapters`")) {
-		  // Execute query
-		  $stmt -> execute();
+		if ($stmt -> prepare("UPDATE chapters SET chapterName = ?, imageUrl = ? WHERE chapterId = ?;")) {
+			$stmt->bind_param('ssi', $chapterName, $imageUrl, $chapterId );
 
-		  // Bind result variables
-		  $stmt -> bind_result($chapterId, $chapterName, $imageUrl);
+			// Execute query
+			$stmt -> execute();
 
-			$chapters = array();
-		  // Fetch value
-			while ($stmt->fetch()) {
-				$chapters[] = new Chapter(
-					$chapterId,
-					$chapterName,
-					$imageUrl
-				);
-			}
-		  // Close statement
-		$stmt -> close();
-		$this->conn->close();
-
-		  return $chapters;
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
 		}
 		else{
 			$message = "Ooopps! Something gone wrong!";
 			return $message;
 		}
 	}
+
+
+// Delete Chapter
+	public function deleteChapter($chapterId){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("DELETE FROM chapters WHERE chapterId = ?;")) {
+			$stmt->bind_param('i', $chapterId);
+
+			// Execute query
+			$stmt -> execute();
+
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+//	*********************** CHAPTER FUNCTIONS CRUD END **********************************  //
+
+
 
 	
 }

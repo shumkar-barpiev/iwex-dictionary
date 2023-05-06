@@ -1,69 +1,47 @@
 <?php
 	class View{
-	public function index(){
+	public function index($chapters){
 		$this->importHead();
 ?>
 
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-	<a class="navbar col-md-3 col-lg-3 me-0 px-3 fs-6 mx-5" href="index.php">
-		<img src="./View/Template/assets/images/icon.png" style="width: 120px;">
-	</a>
+		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+			<a class="navbar col-md-3 col-lg-3 me-0 px-3 fs-6 mx-5" href="index.php">
+				<img src="./View/Template/assets/images/icon.png" style="width: 120px;">
+			</a>
 
-	<div class="navbar-nav">
-		<div class="nav-item text-nowrap">
-			<button class="nav-link px-3" type="button" style="color: #ffcc00">
-				<a href="index.php?page=admin" style="text-decoration: none; color: #fc0;">
-					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
-						<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
-						<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"/>
-					</svg>Login
-				</a>
-			</button>
-		</div>
-	</div>
-</header>
+			<div class="navbar-nav">
+				<div class="nav-item text-nowrap">
+					<button class="nav-link px-3" type="button" style="color: #ffcc00">
+						<a href="index.php?page=admin" style="text-decoration: none; color: #fc0;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open" viewBox="0 0 16 16">
+								<path d="M8.5 10c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1z"/>
+								<path d="M10.828.122A.5.5 0 0 1 11 .5V1h.5A1.5 1.5 0 0 1 13 2.5V15h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V1.5a.5.5 0 0 1 .43-.495l7-1a.5.5 0 0 1 .398.117zM11.5 2H11v13h1V2.5a.5.5 0 0 0-.5-.5zM4 1.934V15h6V1.077l-6 .857z"/>
+							</svg>Login
+						</a>
+					</button>
+				</div>
+			</div>
+		</header>
 
 
 		<div class="container mt-5" style="margin-bottom: 130px;">
 			<h1>Chapters list</h1>
 			<div class="card-group">
 				<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+					<?php  foreach ($chapters as $chapter) { ?>
 					<div class="col-lg-4">
 						<form method="post" action="index.php?page=chapter">
-							<input name="id" value="1" style="display: none;">
+							<input name="id" value="<?php $chapter->getId(); ?>" style="display: none;">
 							<button class="card" type="submit">
-								<img src="./View/Template/assets/images/book1.jpg" class="card-img-top" alt="book1" style="object-fit: cover; height:250px;">
+								<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="card-img-top" alt="<?php $chapter->getImageUrl();?>" style="object-fit: cover; height:250px;">
 								<div class="card-body">
-									<h5 class="card-title">Card title</h5>
+									<h5 class="card-title"><?php echo $chapter->getChapterName(); ?></h5>
 								</div>
 							</button>
 						</form>
 					</div>
 
-
-					<div class="col-lg-4">
-						<form method="post" action="index.php?page=chapter">
-							<input name="id" value="2" style="display: none;">
-							<button class="card" type="submit">
-								<img src="./View/Template/assets/images/book2.jpg" class="card-img-top" alt="book2" style="object-fit: cover; height: 250px;">
-								<div class="card-body">
-									<h5 class="card-title">Card title</h5>
-								</div>
-							</button>
-						</form>
-					</div>
-
-					<div class="col-lg-4">
-						<form method="post" action="index.php?page=chapter">
-							<input name="id" value="3" style="display: none;">
-							<button class="card" type="submit">
-								<img src="./View/Template/assets/images/book3.jpg" class="card-img-top" alt="book3" style="object-fit: cover; height: 250px;">
-								<div class="card-body">
-									<h5 class="card-title">Card title</h5>
-								</div>
-							</button>
-						</form>
-					</div>
+					<?php  } ?>
 
 				</div>
 			</div>
@@ -127,7 +105,13 @@
 										menu 1
 									</button>
 									<ul class="dropdown-menu dropdown-menu-end">
-										<li><a class="dropdown-item" href="#">menu 1.1</a></li>
+										<li>
+											<form method="post" action = "index.php?page=allWords">
+												<input type="hidden" name="subMenu" value="1">
+												<button class="dropdown-item"  type="submit">menu 1.1</button>
+											</form>
+
+										</li>
 										<li><a class="dropdown-item" href="#">menu 1.2</a></li>
 										<li><a class="dropdown-item" href="#">menu 1.3</a></li>
 										<li><a class="dropdown-item" href="#">menu 1.4</a></li>
@@ -384,6 +368,7 @@
 			$this->importFoot();
 	}
 
+//	****************** CHAPTER PART START ******************* //
 	public function allChapters($chapters){
 			$this->importHead();
 			$this->importAdminNavigationBar();
@@ -419,6 +404,8 @@
 								<td>
 									<form action='index.php?page=updateChapterView' method='post'>
 										<input type='hidden' name='chapterID' value=' <?php echo $chapter->getId();?>'>
+										<input type='hidden' name='chapterName' value=' <?php echo $chapter->getChapterName();?>'>
+										<input type='hidden' name='imageName' value=' <?php echo $chapter->getImageUrl();?>'>
 										<button type='submit' class="btn btn-warning">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
 												<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
@@ -446,17 +433,17 @@
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+											<h1 class="modal-title fs-5" id="exampleModalLabel">Эскертүү!!!</h1>
 											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											...
+											Өчүрүлгөн маалыматтар кайра калыбына келтирилбейт. Чын эле өчүрүүнү каалап жатасызбы?
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 											<form action='index.php?page=deleteChapter' method='post'>
 												<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
-												<button type="submit" class="btn btn-primary">Save changes</button>
+												<button type="submit" class="btn btn-danger">Delete</button>
 											</form>
 										</div>
 									</div>
@@ -505,8 +492,7 @@
 		<?php
 		$this->importFoot();
 	}
-
-	public function updateChapter(){
+	public function updateChapter($chapterId, $chapterName, $imageName){
 			$this->importHead();
 			$this->importAdminNavigationBar();
 			?>
@@ -515,12 +501,13 @@
 					<div class="col-lg-6 mx-auto pt-5">
 						<h1 class="mb-5">Update Chapter</h1>
 
-						<form method="post" action="index.php?page=updateChapter">
+						<form method="post" action="index.php?page=updateChapter" enctype="multipart/form-data">
 							<div class="input-group mb-3">
-								<input type="text" class="form-control" name="chapterName" placeholder="Enter the chapter name..." required>
+								<input type="text" class="form-control" name="chapterName" value="<?php echo $chapterName;?>" required>
 							</div>
 							<div class="input-group">
-								<input type="file" class="form-control" id="inputGroupFile04" name="chapterImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required>
+								<input type='hidden' name='chapterID' value='<?php echo $chapterId;?>'>
+								<input type="file" class="form-control" id="inputGroupFile04" name="chapterImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" placeholder="<?php echo $imageName;?>" required>
 								<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Update</button>
 							</div>
 						</form>
@@ -531,6 +518,12 @@
 			<?php
 			$this->importFoot();
 }
+
+//	****************** CHAPTER PART END  ******************* //
+
+
+
+//	****************** CHAPTER MENU PART START ******************* //
 	public function allChaptersMenu(){
 		$this->importHead();
 		$this->importAdminNavigationBar();
@@ -584,6 +577,13 @@
 		$this->importFoot();
 	}
 	public function createChapterMenu(){}
+
+//	****************** CHAPTER MENU PART END  ******************* //
+
+
+
+
+//	****************** CHAPTER SUB MENU PART START ******************* //
 	public function allChaptersSubMenu(){
 		$this->importHead();
 		$this->importAdminNavigationBar();
@@ -637,6 +637,13 @@
 		$this->importFoot();
 	}
 	public function createChapterSubMenu(){}
+
+
+//	****************** CHAPTER SUB MENU PART END ******************* //
+
+
+
+//	****************** WORD PART  START ******************* //
 	public function allWords(){
 		$this->importHead();
 		$this->importAdminNavigationBar();
@@ -690,6 +697,9 @@
 		$this->importFoot();
 	}
 	public function createWord(){}
+
+
+//	****************** WORD PART END ******************* //
 
 		public function importHead(){
 			include "./View/Template/Head.html";
