@@ -33,7 +33,7 @@
 						<form method="post" action="index.php?page=chapter">
 							<input name="id" value="<?php $chapter->getId(); ?>" style="display: none;">
 							<button class="card" type="submit">
-								<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="card-img-top" alt="<?php $chapter->getImageUrl();?>" style="object-fit: cover; height:250px;">
+								<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="card-img-top object-fit-cover" alt="<?php $chapter->getImageUrl();?>" style="object-fit: cover; height:250px;">
 								<div class="card-body">
 									<h5 class="card-title"><?php echo $chapter->getChapterName(); ?></h5>
 								</div>
@@ -382,7 +382,7 @@
 						<tr>
 							<th scope="col">ID</th>
 							<th scope="col">Chapter Name</th>
-							<th scope="col">Chapter Image Name</th>
+							<th scope="col">Chapter Image</th>
 							<th scope="col">
 								Update
 							</th>
@@ -400,7 +400,9 @@
 							<tr>
 								<th scope="row"><?php echo $chapter->getId(); ?></th>
 								<td><?php echo $chapter->getChapterName(); ?></td>
-								<td><?php echo $chapter->getImageUrl();?></td>
+								<td>
+									<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="object-fit-cover rounded mx-auto" alt="<?php echo $chapter->getImageUrl();?>" style="width: 150px; height: 100px;">
+								</td>
 								<td>
 									<form action='index.php?page=updateChapterView' method='post'>
 										<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
