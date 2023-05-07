@@ -403,9 +403,9 @@
 								<td><?php echo $chapter->getImageUrl();?></td>
 								<td>
 									<form action='index.php?page=updateChapterView' method='post'>
-										<input type='hidden' name='chapterID' value=' <?php echo $chapter->getId();?>'>
-										<input type='hidden' name='chapterName' value=' <?php echo $chapter->getChapterName();?>'>
-										<input type='hidden' name='imageName' value=' <?php echo $chapter->getImageUrl();?>'>
+										<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
+										<input type='hidden' name='chapterName' value='<?php echo $chapter->getChapterName();?>'>
+										<input type='hidden' name='imageName' value='<?php echo $chapter->getImageUrl();?>'>
 										<button type='submit' class="btn btn-warning">
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
 												<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
@@ -440,10 +440,11 @@
 											Өчүрүлгөн маалыматтар кайра калыбына келтирилбейт. Чын эле өчүрүүнү каалап жатасызбы?
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
 											<form action='index.php?page=deleteChapter' method='post'>
 												<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
-												<button type="submit" class="btn btn-danger">Delete</button>
+												<input type='hidden' name='imageUrl' value='<?php echo $chapter->getImageUrl();?>'>
+												<button type="submit" class="btn btn-danger">Удалить</button>
 											</form>
 										</div>
 									</div>
@@ -507,6 +508,7 @@
 							</div>
 							<div class="input-group">
 								<input type='hidden' name='chapterID' value='<?php echo $chapterId;?>'>
+								<input type='hidden' name='imageNameUpdate' value='<?php echo $imageName;?>'>
 								<input type="file" class="form-control" id="inputGroupFile04" name="chapterImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" placeholder="<?php echo $imageName;?>" required>
 								<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Update</button>
 							</div>

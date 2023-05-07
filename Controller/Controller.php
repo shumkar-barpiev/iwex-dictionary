@@ -68,7 +68,7 @@ class Controller
           $imageType = $_FILES['chapterImage']['type'];
           $imageSize = $_FILES['chapterImage']['size'];
 
-          if ($imageSize > 4000000){ // surot olchomu 4 MB'tan kop bolboshu kerek
+          if ($imageSize > 3000000){ // surot olchomu 3 MB'tan kop bolboshu kerek
             $warningMessage = "Size of image out of range!";
             $view->adminPanel(true, $warningMessage);
           }else{
@@ -102,47 +102,74 @@ class Controller
         case "updateChapter":
           $chapterId = $_POST['chapterID'];
           $chapterName = $_POST['chapterName'];
+          $oldImageName = $_POST['imageNameUpdate'];
 
-          $imageName = $_FILES['chapterImage']['name'];
-          $imageTmp = $_FILES['chapterImage']['tmp_name'];
-          $imageType = $_FILES['chapterImage']['type'];
-          $imageSize = $_FILES['chapterImage']['size'];
+          $file_path = './Controller/chapterUploads/'.$oldImageName; // Replace with the path to your image file
+          
+          if (file_exists($file_path)) {
 
-          if ($imageSize > 4000000){ // surot olchomu 4 MB'tan kop bolboshu kerek
-            $warningMessage = "Size of image out of range!";
-            $view->adminPanel(true, $warningMessage);
-          }else {
-            // Check if the file is an image
-            if ($imageType == 'image/jpeg' || $imageType == 'image/png' || $imageType == 'image/jpg') {
-              $img_ex = pathinfo($imageName, PATHINFO_EXTENSION);
-              $img_ex_lc = strtolower($img_ex);
+            $imageName = $_FILES['chapterImage']['name'];
+            $imageTmp = $_FILES['chapterImage']['tmp_name'];
+            $imageType = $_FILES['chapterImage']['type'];
+            $imageSize = $_FILES['chapterImage']['size'];
 
-              $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
-              $img_upload_path = dirname(__FILE__) . "/chapterUploads/" . $new_img_name;
+            if ($imageSize > 3000000){ // surot olchomu 3 MB'tan kop bolboshu kerek
+              $warningMessage = "Сүрөттүн өлчөмү чоң, 3 МБ'тан ашпашы керек!";
+              $view->adminPanel(true, $warningMessage);
+            }else {
+              // Check if the file is an image
+              if ($imageType == 'image/jpeg' || $imageType == 'image/png' || $imageType == 'image/jpg') {
+
+                if (unlink($file_path)) {
+                  $img_ex = pathinfo($imageName, PATHINFO_EXTENSION);
+                  $img_ex_lc = strtolower($img_ex);
+
+                  $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
+                  $img_upload_path = dirname(__FILE__) . "/chapterUploads/" . $new_img_name;
 //              echo $img_upload_path;
 
-              $model->updateChapter($chapterId, $chapterName, $new_img_name);
-              move_uploaded_file($imageTmp, $img_upload_path);
+                  $model->updateChapter($chapterId, $chapterName, $new_img_name);
+                  move_uploaded_file($imageTmp, $img_upload_path);
 
-              $warningMessage = 'Chapter Updated successfully!';
-              $view->adminPanel(true, $warningMessage);
-            } else {
-              $warningMessage = "Invalid file type. Please upload an image file.";
-              $view->adminPanel(true, $warningMessage);
+                  $warningMessage = 'Бөлүм ийгиликтүү жаңыртылды!';
+                  $view->adminPanel(true, $warningMessage);
+                } else {
+                  $warningMessage = "Катачылык 1 кетти!";
+                  $view->adminPanel(true, $warningMessage);
+                }
+              } else {
+                $warningMessage = "Файлдын тиби туура эмес. Сүрөт тибиндеги файлдарды киргизиңиз! (jpg, jpeg, png)";
+                $view->adminPanel(true, $warningMessage);
+              }
             }
+
+          } else {
+            $warningMessage = "Катачылык 2 кетти!";
+            $view->adminPanel(true, $warningMessage);
           }
 
           break;
         case "deleteChapter":
           $chapterId = $_POST['chapterID'];
-          $model->deleteChapter($chapterId);
+          $imageName = $_POST['imageUrl'];
 
-          $allChapters = $model->getAllChapters();
+          $file_path = './Controller/chapterUploads/'.$imageName; // Replace with the path to your image file
 
-          $view->allChapters($allChapters);
+          if (file_exists($file_path)) {
+            if (unlink($file_path)) {
+              $model->deleteChapter($chapterId);
+              $allChapters = $model->getAllChapters();
+
+              $view->allChapters($allChapters);
+            } else {
+              $warningMessage = "Файлды өчүрүү катасы кетти!";
+              $view->adminPanel(true, $warningMessage);
+            }
+          } else {
+            $warningMessage = "Катачылык кетти!";
+            $view->adminPanel(true, $warningMessage);
+          }
           break;
-
-
 
 //          CHAPTERS MENU PART
         case "allChaptersMenu":
