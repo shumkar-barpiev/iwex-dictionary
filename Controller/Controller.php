@@ -92,7 +92,7 @@ class Controller
             }
           }
           break;
-        case "updateChapterView":
+        case "updateChapterForm":
           $chapterId = $_POST['chapterID'];
           $chapterName = $_POST['chapterName'];
           $imageName = $_POST['imageName'];
@@ -173,11 +173,36 @@ class Controller
 
 //          CHAPTERS MENU PART
         case "allChaptersMenu":
-          echo "all chapters menu";
+          $view->allChaptersMenu();
+          break;
+        case "createChapterMenuForm":
+          $allChapters = $model->getAllChapters();
+
+
+          $view->createChapterMenu($allChapters);
           break;
         case "createChapterMenu":
-          echo "all chapters menu";
+
+          $chapterId = $_POST['chapterSelect'];
+          $chapterMenuName = $_POST['chapterMenuName'];
+
+          echo  $chapterId;
+          echo  $chapterMenuName;
+
           break;
+        case "updateChapterMenuForm":
+          echo "all chapters menu";
+
+          break;
+        case "updateChapterMenu":
+          echo "all chapters menu";
+
+          break;
+        case "deleteChapterMenu":
+          echo "all chapters menu";
+
+          break;
+
 
 
 

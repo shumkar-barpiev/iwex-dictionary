@@ -404,7 +404,7 @@
 									<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="object-fit-cover rounded mx-auto" alt="<?php echo $chapter->getImageUrl();?>" style="width: 150px; height: 100px;">
 								</td>
 								<td>
-									<form action='index.php?page=updateChapterView' method='post'>
+									<form action='index.php?page=updateChapterForm' method='post'>
 										<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
 										<input type='hidden' name='chapterName' value='<?php echo $chapter->getChapterName();?>'>
 										<input type='hidden' name='imageName' value='<?php echo $chapter->getImageUrl();?>'>
@@ -580,7 +580,44 @@
 		<?php
 		$this->importFoot();
 	}
-	public function createChapterMenu(){}
+	public function createChapterMenu($allChapters){
+		$this->importHead();
+		$this->importAdminNavigationBar();
+		?>
+		<div class="container-fluid " >
+			<div class="row">
+				<div class="col-lg-6 mx-auto pt-5">
+					<h1 class="mb-5">Create Chapter Menu</h1>
+
+					<form method="post" action="index.php?page=createChapterMenu" enctype="multipart/form-data">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" name="chapterMenuName" placeholder="Enter the chapter menu name..." required>
+
+							<div class="form-floating">
+								<select name="chapterSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example" >
+									<?php  foreach ($allChapters as $chapter) { ?>
+									<option value="<?php echo $chapter->getId();?>"><?php echo $chapter->getChapterName();?></option>
+									<?php }?>
+								</select>
+							</div>
+						</div>
+						<div class="input-group">
+							<button class="btn btn-outline-secondary w-100" type="submit">Create</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<?php
+		$this->importFoot();
+
+	}
+
+	public function updateChapterMenu(){}
 
 //	****************** CHAPTER MENU PART END  ******************* //
 
