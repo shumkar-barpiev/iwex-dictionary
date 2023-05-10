@@ -5,7 +5,7 @@
 ?>
 
 		<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-			<a class="navbar col-md-3 col-lg-3 me-0 px-3 fs-6 mx-5" href="index.php">
+			<a class="navbar col-md-3 col-lg-3 me-0 px-3 fs-6 mb-1 mt-1" href="index.php">
 				<img src="./View/Template/assets/images/icon.png" style="width: 120px;">
 			</a>
 
@@ -25,7 +25,7 @@
 
 
 		<div class="container mt-5" style="margin-bottom: 130px;">
-			<h1>Chapters list</h1>
+			<h1 style="font-family: 'Sans-serif'; margin-bottom: 18px;">Inhalt:</h1>
 			<div class="card-group">
 				<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 					<?php  foreach ($chapters as $chapter) { ?>
@@ -33,9 +33,9 @@
 						<form method="post" action="index.php?page=chapter">
 							<input name="id" value="<?php $chapter->getId(); ?>" style="display: none;">
 							<button class="card" type="submit">
-								<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="card-img-top object-fit-cover" alt="<?php $chapter->getImageUrl();?>" style="object-fit: cover; height:250px;">
+								<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="card-img-top object-fit-cover" alt="<?php $chapter->getImageUrl();?>" style="object-fit: cover; height:270px;">
 								<div class="card-body">
-									<h5 class="card-title"><?php echo $chapter->getChapterName(); ?></h5>
+									<h4 class="card-title" style="font-family: 'Times New Roman'; text-transform: uppercase;"><b> <?php echo $chapter->getChapterName(); ?></b></h4>
 								</div>
 							</button>
 						</form>
@@ -404,21 +404,16 @@
 									<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="object-fit-cover rounded mx-auto" alt="<?php echo $chapter->getImageUrl();?>" style="width: 150px; height: 100px;">
 								</td>
 								<td>
-									<form action='index.php?page=updateChapterForm' method='post'>
-										<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
-										<input type='hidden' name='chapterName' value='<?php echo $chapter->getChapterName();?>'>
-										<input type='hidden' name='imageName' value='<?php echo $chapter->getImageUrl();?>'>
-										<button type='submit' class="btn btn-warning">
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-												<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-												<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-											</svg>
-										</button>
-									</form>
+									<button type='button' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update<?php echo $chapter->getId(); ?>">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+											<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+											<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+										</svg>
+									</button>
 								</td>
 								<td>
 									<!-- Button trigger modal -->
-									<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#<?php echo $chapter->getId(); ?>">
+									<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#delete<?php echo $chapter->getId(); ?>">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
 											<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
 										</svg>
@@ -431,7 +426,7 @@
 
 
 							<!-- Modal -->
-							<div class="modal fade" id="<?php echo $chapter->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal fade" id="delete<?php echo $chapter->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -447,6 +442,30 @@
 												<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
 												<input type='hidden' name='imageUrl' value='<?php echo $chapter->getImageUrl();?>'>
 												<button type="submit" class="btn btn-danger">Удалить</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Modal -->
+							<div class="modal fade" id="update<?php echo $chapter->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5" id="exampleModalLabel">Эскертүү!!!</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Бул бөлүмдүн маалыматтарын жаңыртууну каалайсызбы?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+											<form action='index.php?page=updateChapterForm' method='post'>
+												<input type='hidden' name='chapterID' value='<?php echo $chapter->getId();?>'>
+												<input type='hidden' name='chapterName' value='<?php echo $chapter->getChapterName();?>'>
+												<input type='hidden' name='imageName' value='<?php echo $chapter->getImageUrl();?>'>
+												<button type="submit" class="btn btn-primary">Дальше</button>
 											</form>
 										</div>
 									</div>

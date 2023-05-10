@@ -182,12 +182,22 @@ class Controller
           $view->createChapterMenu($allChapters);
           break;
         case "createChapterMenu":
-
+          $allChapters = $model->getAllChapters();
           $chapterId = $_POST['chapterSelect'];
           $chapterMenuName = $_POST['chapterMenuName'];
+          $chapterName = "";
+
+          foreach ($allChapters as $chapter) {
+            if( $chapter->getId() == $chapterId){
+              $chapterName = $chapter->getChapterName();
+              break;
+            }
+          }
+
 
           echo  $chapterId;
           echo  $chapterMenuName;
+          echo  $chapterName;
 
           break;
         case "updateChapterMenuForm":
