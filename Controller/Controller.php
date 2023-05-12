@@ -173,7 +173,8 @@ class Controller
 
 //          CHAPTERS MENU PART
         case "allChaptersMenu":
-          $view->allChaptersMenu();
+          $allChaptersMenu = $model->getAllChaptersMenu();
+          $view->allChaptersMenu($allChaptersMenu);
           break;
         case "createChapterMenuForm":
           $allChapters = $model->getAllChapters();
@@ -194,23 +195,44 @@ class Controller
             }
           }
 
-
-          echo  $chapterId;
-          echo  $chapterMenuName;
-          echo  $chapterName;
-
+          $model->createChapterMenu($chapterMenuName, $chapterId, $chapterName );
+          $warningMessage =  'Chapter Menu created successfully!';
+          $view->adminPanel(true, $warningMessage);
           break;
         case "updateChapterMenuForm":
-          echo "all chapters menu";
+          $allChapters = $model->getAllChapters();
 
+          $chapterMenuId = $_POST["chapterMenuId"];
+          $chapterMenuName = $_POST["chapterMenuName"];
+          $chapterId = $_POST["chapterId"];
+
+          $view->updateChapterMenu($chapterMenuId,$chapterMenuName,  $allChapters, $chapterId);
           break;
         case "updateChapterMenu":
-          echo "all chapters menu";
+          $allChapters = $model->getAllChapters();
+          $chapterId = $_POST['chapterSelect'];
+          $chapterMenuName = $_POST['chapterMenuName'];
+          $chapterName = "";
+          $chapterMenuId = $_POST['chapterMenuId'];
 
+          foreach ($allChapters as $chapter) {
+            if( $chapter->getId() == $chapterId){
+              $chapterName = $chapter->getChapterName();
+              break;
+            }
+          }
+
+
+          $model->updateChapterMenu($chapterMenuId,$chapterMenuName, $chapterId, $chapterName );
+          $allChaptersMenu = $model->getAllChaptersMenu();
+          $view->allChaptersMenu($allChaptersMenu);
           break;
         case "deleteChapterMenu":
-          echo "all chapters menu";
+          $chapterMenuId = $_POST['chapterMenuId'];
 
+          $model->deleteChapterMenu($chapterMenuId);
+          $allChaptersMenu = $model->getAllChaptersMenu();
+          $view->allChaptersMenu($allChaptersMenu);
           break;
 
 

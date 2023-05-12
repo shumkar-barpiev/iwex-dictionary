@@ -2,6 +2,7 @@
 require_once("./Controller/Controller.php");
 require_once("./Models/Entity/Entity.php");
 require_once("./Models/Entity/ChapterEntity.php");
+require_once("./Models/Entity/ChapterMenuEntity.php");
 require_once("./View/View.php");
 require_once("./Models/Models.php");
 require_once("./Models/Config.php");
