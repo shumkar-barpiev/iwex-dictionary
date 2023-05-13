@@ -235,14 +235,34 @@ class Controller
           $view->allChaptersMenu($allChaptersMenu);
           break;
 
-
-
-
 //          CHAPTERS SUB MENU PART
         case "allChaptersSubMenu":
-          echo "all chapters";
+          $allChaptersMenu = $model->getAllChaptersMenu();
+
+          $view->allChaptersSubMenu($allChaptersMenu);
+          break;
+        case "createChapterSubMenuForm":
+          $allChaptersMenu = $model->getAllChaptersMenu();
+
+          $view->createChapterSubMenu($allChaptersMenu);
           break;
         case "createChapterSubMenu":
+
+
+          echo "all chapters";
+          break;
+        case "updateChapterSubMenuForm":
+
+
+          echo "all chapters";
+          break;
+        case "updateChapterSubMenu":
+
+
+          echo "all chapters";
+          break;
+        case "deleteChapterSubMenu":
+
           echo "all chapters";
           break;
 

@@ -495,15 +495,15 @@
 		<div class="container-fluid " >
 			<div class="row">
 				<div class="col-lg-6 mx-auto pt-5">
-					<h1 class="mb-5">Create Chapter</h1>
+					<h1 class="mb-5">Бөлүм түзүү</h1>
 
 					<form method="post" action="index.php?page=createChapter" enctype="multipart/form-data">
 						<div class="input-group mb-3">
-							<input type="text" class="form-control" name="chapterName" placeholder="Enter the chapter name..." required>
+							<input type="text" class="form-control" name="chapterName" placeholder="Бөлүмдүн ысымын жазыңыз..." required>
 						</div>
 						<div class="input-group">
 							<input type="file" class="form-control" id="inputGroupFile04" name="chapterImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required>
-							<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Create</button>
+							<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Түзүү</button>
 						</div>
 					</form>
 				</div>
@@ -653,11 +653,11 @@
 		<div class="container-fluid " >
 			<div class="row">
 				<div class="col-lg-6 mx-auto pt-5">
-					<h1 class="mb-5">Create Chapter Menu</h1>
+					<h1 class="mb-5">Бөлүмдүн темасын түзүү</h1>
 
 					<form method="post" action="index.php?page=createChapterMenu" enctype="multipart/form-data">
 						<div class="input-group mb-3">
-							<input type="text" class="form-control" name="chapterMenuName" placeholder="Enter the chapter menu name..." required>
+							<input type="text" class="form-control" name="chapterMenuName" placeholder="Теманын ысымын жазыныз..." required>
 
 							<div class="form-floating">
 								<select name="chapterSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example" >
@@ -668,7 +668,7 @@
 							</div>
 						</div>
 						<div class="input-group">
-							<button class="btn btn-outline-secondary w-100" type="submit">Create</button>
+							<button class="btn btn-outline-secondary w-100" type="submit">Түзүү</button>
 						</div>
 					</form>
 				</div>
@@ -731,7 +731,7 @@
 
 
 //	****************** CHAPTER SUB MENU PART START ******************* //
-	public function allChaptersSubMenu(){
+	public function allChaptersSubMenu($allChaptersMenu){
 		$this->importHead();
 		$this->importAdminNavigationBar();
 		?>
@@ -783,7 +783,83 @@
 		<?php
 		$this->importFoot();
 	}
-	public function createChapterSubMenu(){}
+	public function createChapterSubMenu($allChaptersMenu){
+		$this->importHead();
+		$this->importAdminNavigationBar();
+		?>
+		<div class="container-fluid " >
+			<div class="row">
+				<div class="col-lg-6 mx-auto pt-5">
+					<h1 class="mb-5">Подтема түзүү</h1>
+
+					<form method="post" action="index.php?page=createChapterSubMenu" enctype="multipart/form-data">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" name="chapterSubMenuName" placeholder="Подтеманын ысымын жазыңыз..." required>
+
+							<div class="form-floating">
+								<select name="chapterMenuSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example" >
+									<?php  foreach ($allChaptersMenu as $chapterMenu) { ?>
+										<option value="<?php echo $chapterMenu->getId();?>"><?php echo $chapterMenu->getChapterMenuName();?></option>
+									<?php }?>
+								</select>
+							</div>
+						</div>
+						<div class="input-group">
+							<button class="btn btn-outline-secondary w-100" type="submit">Түзүү</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<?php
+		$this->importFoot();
+	}
+	public function updateChapterSubMenu($chapterMenuId, $chapterMenuName, $allChapters, $chapterId){
+		$this->importHead();
+		$this->importAdminNavigationBar();
+		?>
+		<div class="container-fluid " >
+			<div class="row">
+				<div class="col-lg-6 mx-auto pt-5">
+					<h1 class="mb-5">Update Chapter Menu</h1>
+
+					<form method="post" action="index.php?page=updateChapterMenu" enctype="multipart/form-data">
+						<div class="input-group mb-3">
+							<input type="text" class="form-control" name="chapterMenuName" value="<?php echo $chapterMenuName; ?>" required>
+
+							<div class="form-floating">
+								<select name="chapterSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example" >
+									<?php  foreach ($allChapters as $chapter) {
+
+										if ($chapter->getId() == $chapterId){ ?>
+											<option value="<?php echo $chapter->getId();?>" selected><?php echo $chapter->getChapterName();?></option>
+										<?php } else{ ?>
+											<option value="<?php echo $chapter->getId();?>"><?php echo $chapter->getChapterName();?></option>
+											<?php
+										}
+									} ?>
+								</select>
+							</div>
+						</div>
+						<div class="input-group">
+							<input type='hidden' name='chapterMenuId' value='<?php echo $chapterMenuId;?>'>
+							<button class="btn btn-outline-secondary w-100" type="submit">Жаныртуу</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<?php
+		$this->importFoot();
+	}
 
 
 //	****************** CHAPTER SUB MENU PART END ******************* //

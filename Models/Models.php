@@ -377,6 +377,164 @@ class Model{
 //	*********************** CHAPTER MENU FUNCTIONS CRUD END **********************************  //
 
 
+
+
+//	*********************** CHAPTER SUB MENU FUNCTIONS CRUD **********************************  //
+//	Get all chapters menu
+	public function getAllChaptersSubMenu(){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("SELECT * FROM `subMenu`")) {
+			// Execute query
+			$stmt -> execute();
+
+			// Bind result variables
+			$stmt -> bind_result($id, $subMenuName, $menuId, $menuName, $chapterName);
+
+			$chapterSubMenu = array();
+			// Fetch value
+			while ($stmt->fetch()) {
+				$chapterSubMenu[] = new ChapterSubMenu(
+					$id,
+					$subMenuName,
+					$menuId,
+					$menuName,
+					$chapterName
+				);
+			}
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+
+			return $chapterSubMenu;
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+// Create Chapter Menu
+	public function createChapterSubMenu($subMenuName, $menuId, $menuName, $chapterName){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("INSERT INTO subMenu (subMenuName, menuId, menuName, chapterName) VALUES (?, ?, ?, ?);")) {
+			$stmt->bind_param('siss', $subMenuName, $menuId, $menuName, $chapterName);
+
+			// Execute query
+			$stmt -> execute();
+
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+
+// Update Chapter Menu
+	public function updateChapterSubMenu($id, $subMenuName, $menuId, $menuName, $chapterName){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("UPDATE subMenu SET subMenuName = ?, menuId = ?, menuName = ?, chapterName = ?  WHERE id = ?;")) {
+			$stmt->bind_param('sissi', $subMenuName, $menuId, $menuName, $chapterName, $id );
+
+			// Execute query
+			$stmt -> execute();
+
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+
+// Delete Chapter Menu
+	public function deleteChapterSubMenu($id){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("DELETE FROM subMenu WHERE id = ?;")) {
+			$stmt->bind_param('i', $id);
+
+			// Execute query
+			$stmt -> execute();
+
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+//	*********************** CHAPTER SUB MENU FUNCTIONS CRUD END **********************************  //
+
+
 	
 }
  ?>
