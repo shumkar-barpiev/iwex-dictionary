@@ -731,10 +731,11 @@
 
 
 //	****************** CHAPTER SUB MENU PART START ******************* //
-	public function allChaptersSubMenu($allChaptersMenu){
+	public function allChaptersSubMenu($allChapterSubMenu){
 		$this->importHead();
 		$this->importAdminNavigationBar();
 		?>
+
 
 		<div class="container-fluid " >
 			<div class="row">
@@ -742,43 +743,100 @@
 					<table class="table">
 						<thead>
 						<tr>
-							<th scope="col">#</th>
-							<th scope="col">First</th>
-							<th scope="col">Last</th>
-							<th scope="col">Handle</th>
+							<th scope="col">id</th>
+							<th scope="col">Sub Menu</th>
+							<th scope="col">Menu</th>
+							<th scope="col">Chapter</th>
+							<th scope="col">Update</th>
+							<th scope="col">Delete</th>
 						</tr>
 						</thead>
+
 						<tbody class="table-group-divider">
+
+						<?php  foreach ($allChapterSubMenu as $subMenu) { ?>
 						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
+							<th scope="row"> <?php echo $subMenu->getId(); ?></th>
+							<td><?php echo $subMenu->getSubMenuName();?></td>
+							<td><?php echo $subMenu->getMenuName(); ?> </td>
+							<td><?php echo $subMenu->getChapterName(); ?></td>
+							<td>
+								<button type='button' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update<?php echo $subMenu->getId(); ?>">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+									</svg>
+								</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#delete<?php echo $subMenu->getId(); ?>">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+										<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+									</svg>
+								</button>
+							</td>
 						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
+
+
+
+							<!-- Modal delete -->
+							<div class="modal fade" id="delete<?php echo $subMenu->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5" id="exampleModalLabel">Эскертүү!!!</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Өчүрүлгөн маалыматтар кайра калыбына келтирилбейт. Чын эле өчүрүүнү каалап жатасызбы?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+											<form action='index.php?page=deleteChapterSubMenu' method='post'>
+												<input type='hidden' name='chapterSubMenuId' value='<?php echo $subMenu->getId();?>'>
+												<button type="submit" class="btn btn-danger">Удалить</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+							<!-- Modal update -->
+							<div class="modal fade" id="update<?php echo $subMenu->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5" id="exampleModalLabel">Эскертүү!!!</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											Бул подтеманын маалыматтарын жаңыртууну каалайсызбы?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+											<form action='index.php?page=updateChapterSubMenuForm' method='post'>
+												<input type='hidden' name='chapterSubMenuId' value='<?php echo $subMenu->getId();?>'>
+												<input type='hidden' name='chapterSubMenuName' value='<?php echo $subMenu->getSubMenuName();?>'>
+												<input type='hidden' name='menuId' value='<?php echo $subMenu->getMenuid();?>'>
+												<input type='hidden' name='menuName' value='<?php echo $subMenu->getMenuName();?>'>
+												<input type='hidden' name='chapterName' value='<?php echo $subMenu->getChapterName();?>'>
+												<button type="submit" class="btn btn-primary">Дальше</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						<?php } ?>
 
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
+
 
 		<?php
 		$this->importFoot();
@@ -818,7 +876,7 @@
 		<?php
 		$this->importFoot();
 	}
-	public function updateChapterSubMenu($chapterMenuId, $chapterMenuName, $allChapters, $chapterId){
+	public function updateChapterSubMenu($chapterSubMenuId, $chapterSubMenuName, $allChaptersMenu, $menuId){
 		$this->importHead();
 		$this->importAdminNavigationBar();
 		?>
@@ -827,18 +885,18 @@
 				<div class="col-lg-6 mx-auto pt-5">
 					<h1 class="mb-5">Update Chapter Menu</h1>
 
-					<form method="post" action="index.php?page=updateChapterMenu" enctype="multipart/form-data">
+					<form method="post" action="index.php?page=updateChapterSubMenu" enctype="multipart/form-data">
 						<div class="input-group mb-3">
-							<input type="text" class="form-control" name="chapterMenuName" value="<?php echo $chapterMenuName; ?>" required>
+							<input type="text" class="form-control" name="chapterSubMenuName" value="<?php echo $chapterSubMenuName; ?>" required>
 
 							<div class="form-floating">
-								<select name="chapterSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example" >
-									<?php  foreach ($allChapters as $chapter) {
+								<select name="chapterMenuSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example" >
+									<?php  foreach ($allChaptersMenu as $menu) {
 
-										if ($chapter->getId() == $chapterId){ ?>
-											<option value="<?php echo $chapter->getId();?>" selected><?php echo $chapter->getChapterName();?></option>
+										if ($menu->getId() == $menuId){ ?>
+											<option value="<?php echo $menu->getId();?>" selected><?php echo $menu->getChapterMenuName();?></option>
 										<?php } else{ ?>
-											<option value="<?php echo $chapter->getId();?>"><?php echo $chapter->getChapterName();?></option>
+											<option value="<?php echo $menu->getId();?>"><?php echo $menu->getChapterMenuName();?></option>
 											<?php
 										}
 									} ?>
@@ -846,7 +904,7 @@
 							</div>
 						</div>
 						<div class="input-group">
-							<input type='hidden' name='chapterMenuId' value='<?php echo $chapterMenuId;?>'>
+							<input type='hidden' name='subMenuId' value='<?php echo $chapterSubMenuId;?>'>
 							<button class="btn btn-outline-secondary w-100" type="submit">Жаныртуу</button>
 						</div>
 					</form>

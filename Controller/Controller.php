@@ -196,7 +196,7 @@ class Controller
           }
 
           $model->createChapterMenu($chapterMenuName, $chapterId, $chapterName );
-          $warningMessage =  'Chapter Menu created successfully!';
+          $warningMessage =  'Бөлүм темасы ийгиликтүү түзүлдү!';
           $view->adminPanel(true, $warningMessage);
           break;
         case "updateChapterMenuForm":
@@ -237,9 +237,9 @@ class Controller
 
 //          CHAPTERS SUB MENU PART
         case "allChaptersSubMenu":
-          $allChaptersMenu = $model->getAllChaptersMenu();
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
 
-          $view->allChaptersSubMenu($allChaptersMenu);
+          $view->allChaptersSubMenu($allChapterSubMenu);
           break;
         case "createChapterSubMenuForm":
           $allChaptersMenu = $model->getAllChaptersMenu();
@@ -248,22 +248,68 @@ class Controller
           break;
         case "createChapterSubMenu":
 
+          $subMenuname = $_POST['chapterSubMenuName'];
+          $menuId = $_POST['chapterMenuSelect'];
+          $menuName = "";
+          $chapterName = "";
 
-          echo "all chapters";
+
+          $allChaptersMenu = $model->getAllChaptersMenu();
+
+          foreach ($allChaptersMenu as $chapterMenu) {
+            if( $chapterMenu->getId() == $menuId){
+              $menuName = $chapterMenu->getChapterMenuName();
+              $chapterName = $chapterMenu->getChapterName();
+              break;
+            }
+          }
+
+
+          $model->createChapterSubMenu($subMenuname, $menuId, $menuName, $chapterName );
+          $warningMessage =  'Подтема ийгиликтүү түзүлдү!';
+          $view->adminPanel(true, $warningMessage);
+
           break;
         case "updateChapterSubMenuForm":
+          $allChaptersMenu = $model->getAllChaptersMenu();
 
+          $chapterSubMenuId = $_POST["chapterSubMenuId"];
+          $chapterSubMenuName = $_POST["chapterSubMenuName"];
+          $menuId = $_POST["menuId"];
 
-          echo "all chapters";
+          $view->updateChapterSubMenu($chapterSubMenuId, $chapterSubMenuName,  $allChaptersMenu, $menuId);
           break;
         case "updateChapterSubMenu":
+          $subMenuId = $_POST['subMenuId'];
+          $subMenuname = $_POST['chapterSubMenuName'];
+          $menuId = $_POST['chapterMenuSelect'];
+          $menuName = "";
+          $chapterName = "";
 
 
-          echo "all chapters";
+          $allChaptersMenu = $model->getAllChaptersMenu();
+
+          foreach ($allChaptersMenu as $chapterMenu) {
+            if( $chapterMenu->getId() == $menuId){
+              $menuName = $chapterMenu->getChapterMenuName();
+              $chapterName = $chapterMenu->getChapterName();
+              break;
+            }
+          }
+
+
+          $model->updateChapterSubMenu($subMenuId,$subMenuname, $menuId, $menuName, $chapterName );
+
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+          $view->allChaptersSubMenu($allChapterSubMenu);
           break;
         case "deleteChapterSubMenu":
+          $subMenuId = $_POST['chapterSubMenuId'];
 
-          echo "all chapters";
+          $model->deleteChapterSubMenu($subMenuId);
+
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+          $view->allChaptersSubMenu($allChapterSubMenu);
           break;
 
 
