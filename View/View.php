@@ -977,8 +977,55 @@
 		<?php
 		$this->importFoot();
 	}
-	public function createWord(){}
+	public function createWord($allChapterSubMenu){
+		$this->importHead();
+		$this->importAdminNavigationBar();
+		?>
+		<div class="container-fluid " >
+			<div class="row">
+				<div class="col-lg-6 mx-auto pt-5">
+					<h1 class="mb-5">Сөздүк түзүү</h1>
 
+					<form class="form-floating" method="post" action="index.php?page=createWord" enctype="multipart/form-data">
+						<div class="input-group mb-3">
+							<span class="input-group-text" >German</span>
+							<input type="text" class="form-control" name="germanWord" placeholder="Сөздүн немисче мааниси..." required>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text" >Russian</span>
+							<input type="text" class="form-control" name="russianWord" placeholder="Сөздүн орусча мааниси..." required>
+						</div>
+						<div class="input-group mb-3">
+							<div class="form-floating">
+								<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+								<label for="floatingTextarea2">Сөздүн түшүндүрмөсүн жазыңыз...</label>
+							</div>
+						</div>
+						<div class="input-group mb-3">
+
+							<div class="form-floating">
+								<select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+									<?php  foreach ($allChapterSubMenu as $chapterSubMenu) { ?>
+										<option value="<?php echo $chapterSubMenu->getId();?>"><?php echo $chapterSubMenu->getSubMenuName();?></option>
+									<?php }?>
+								</select>
+								<label for="floatingSelect">Кайсы подтемага таандык экендигин тандаңыз :</label>
+							</div>
+						</div>
+						<div class="input-group">
+							<input type="file" class="form-control" id="inputGroupFile04" name="wordImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required>
+							<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Түзүү</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		$this->importFoot();
+
+	}
+	public function updateWord(){}
 
 //	****************** WORD PART END ******************* //
 

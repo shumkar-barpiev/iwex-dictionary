@@ -319,6 +319,11 @@ class Controller
           echo $subMenuId;
           echo "all chapters";
           break;
+        case "createWordForm":
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+
+          $view->createWord($allChapterSubMenu);
+          break;
         case "createWord":
           echo "all chapters";
           break;
