@@ -380,7 +380,7 @@ class Model{
 
 
 //	*********************** CHAPTER SUB MENU FUNCTIONS CRUD **********************************  //
-//	Get all chapters menu
+//	Get all chapters sub menu
 	public function getAllChaptersSubMenu(){
 		$conf = new Config();
 
@@ -428,7 +428,7 @@ class Model{
 		}
 	}
 
-// Create Chapter Menu
+// Create Chapter sub Menu
 	public function createChapterSubMenu($subMenuName, $menuId, $menuName, $chapterName){
 		$conf = new Config();
 
@@ -462,8 +462,7 @@ class Model{
 		}
 	}
 
-
-// Update Chapter Menu
+// Update Chapter sub Menu
 	public function updateChapterSubMenu($id, $subMenuName, $menuId, $menuName, $chapterName){
 		$conf = new Config();
 
@@ -497,8 +496,7 @@ class Model{
 		}
 	}
 
-
-// Delete Chapter Menu
+// Delete Chapter sub Menu
 	public function deleteChapterSubMenu($id){
 		$conf = new Config();
 
@@ -535,6 +533,217 @@ class Model{
 //	*********************** CHAPTER SUB MENU FUNCTIONS CRUD END **********************************  //
 
 
-	
+
+//	*********************** Word FUNCTIONS CRUD **********************************  //
+//	Get all words
+    public function getAllWords(){
+        $conf = new Config();
+
+        $this->conn = new mysqli(
+            $conf->getHost(),
+            $conf->getUserName(),
+            $conf->getUserPass(),
+            $conf->getDBName()
+        );
+        // Check connection
+        if ($this->conn->connect_error) {
+            $this->conn->close();
+            return "Connection failed";
+        }
+
+        $stmt = $this->conn -> stmt_init();
+
+        if ($stmt -> prepare("SELECT * FROM `dictionaryWords`;")) {
+            // Execute query
+            $stmt -> execute();
+
+            // Bind result variables
+            $stmt -> bind_result($id, $subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName);
+
+            $allWords = array();
+            // Fetch value
+            while ($stmt->fetch()) {
+                $allWords[] = new DictionaryWord(
+                    $id,
+                    $subMenuId ,
+                    $wordImage,
+                    $germanWord,
+                    $russianWord,
+                    $description,
+                    $chapterName,
+                    $menuName,
+                    $subMenuName);
+            }
+            // Close statement
+            $stmt -> close();
+            $this->conn->close();
+
+            return $allWords;
+        }
+        else{
+            $message = "Ooopps! Something gone wrong!";
+            return $message;
+        }
+    }
+
+    //	Get all words by sub menu id
+    public function getWordsBySubMenuId($subMenuId){
+        $conf = new Config();
+
+        $this->conn = new mysqli(
+            $conf->getHost(),
+            $conf->getUserName(),
+            $conf->getUserPass(),
+            $conf->getDBName()
+        );
+        // Check connection
+        if ($this->conn->connect_error) {
+            $this->conn->close();
+            return "Connection failed";
+        }
+
+        $stmt = $this->conn -> stmt_init();
+
+        if ($stmt -> prepare("SELECT * FROM `dictionaryWords` WHERE subMenuId = ?;")) {
+
+            $stmt->bind_param('i', $subMenuId);
+
+            // Execute query
+            $stmt -> execute();
+
+            // Bind result variables
+            $stmt -> bind_result($id, $subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName);
+
+            $allWords = array();
+            // Fetch value
+            while ($stmt->fetch()) {
+                $allWords[] = new DictionaryWord(
+                    $id,
+                    $subMenuId ,
+                    $wordImage,
+                    $germanWord,
+                    $russianWord,
+                    $description,
+                    $chapterName,
+                    $menuName,
+                    $subMenuName);
+            }
+            // Close statement
+            $stmt -> close();
+            $this->conn->close();
+
+            return $allWords;
+        }
+        else{
+            $message = "Ooopps! Something gone wrong!";
+            return $message;
+        }
+    }
+
+// Create word
+    public function createWord($subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName){
+        $conf = new Config();
+
+        $this->conn = new mysqli(
+            $conf->getHost(),
+            $conf->getUserName(),
+            $conf->getUserPass(),
+            $conf->getDBName()
+        );
+        // Check connection
+        if ($this->conn->connect_error) {
+            $this->conn->close();
+            return "Connection failed";
+        }
+
+        $stmt = $this->conn -> stmt_init();
+
+        if ($stmt -> prepare("INSERT INTO dictionaryWords (subMenuId, wordImage, germanWord, russianWord, description, chapterName, menuName, subMenuName) VALUES (?, ?, ?, ?, ?, ?, ?, ?);")) {
+            $stmt->bind_param('isssssss', $subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName);
+            ;
+
+            // Execute query
+            $stmt -> execute();
+
+            // Close statement
+            $stmt -> close();
+            $this->conn->close();
+        }
+        else{
+            $message = "Ooopps! Something gone wrong!";
+            return $message;
+        }
+    }
+
+// Update word
+    public function updateWord($id, $subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName){
+        $conf = new Config();
+
+        $this->conn = new mysqli(
+            $conf->getHost(),
+            $conf->getUserName(),
+            $conf->getUserPass(),
+            $conf->getDBName()
+        );
+        // Check connection
+        if ($this->conn->connect_error) {
+            $this->conn->close();
+            return "Connection failed";
+        }
+
+        $stmt = $this->conn -> stmt_init();
+
+        if ($stmt -> prepare("UPDATE dictionaryWords SET subMenuId = ?, wordImage = ?, germanWord = ?, russianWord = ?, description = ?, chapterName = ?, menuName = ?, subMenuName = ?  WHERE id = ?;")) {
+            $stmt->bind_param('isssssssi', $subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName, $id);
+
+            // Execute query
+            $stmt -> execute();
+
+            // Close statement
+            $stmt -> close();
+            $this->conn->close();
+        }
+        else{
+            $message = "Ooopps! Something gone wrong!";
+            return $message;
+        }
+    }
+
+// Delete word
+    public function deleteWord($id){
+        $conf = new Config();
+
+        $this->conn = new mysqli(
+            $conf->getHost(),
+            $conf->getUserName(),
+            $conf->getUserPass(),
+            $conf->getDBName()
+        );
+        // Check connection
+        if ($this->conn->connect_error) {
+            $this->conn->close();
+            return "Connection failed";
+        }
+
+        $stmt = $this->conn -> stmt_init();
+
+        if ($stmt -> prepare("DELETE FROM dictionaryWords WHERE id = ?;")) {
+            $stmt->bind_param('i', $id);
+
+            // Execute query
+            $stmt -> execute();
+
+            // Close statement
+            $stmt -> close();
+            $this->conn->close();
+        }
+        else{
+            $message = "Ooopps! Something gone wrong!";
+            return $message;
+        }
+    }
+
+//	*********************** Word FUNCTIONS CRUD END **********************************  //
+
 }
  ?>
