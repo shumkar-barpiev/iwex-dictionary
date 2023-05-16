@@ -270,6 +270,55 @@ class Model{
 		}
 	}
 
+//	Get all chapters menu
+    public function getAllChaptersMenuByChapterId($id){
+        $conf = new Config();
+
+        $this->conn = new mysqli(
+            $conf->getHost(),
+            $conf->getUserName(),
+            $conf->getUserPass(),
+            $conf->getDBName()
+        );
+        // Check connection
+        if ($this->conn->connect_error) {
+            $this->conn->close();
+            return "Connection failed";
+        }
+
+        $stmt = $this->conn -> stmt_init();
+
+        if ($stmt -> prepare("SELECT * FROM `menu` WHERE chapterId = ?")) {
+
+			$stmt->bind_param('i', $id);
+            // Execute query
+            $stmt -> execute();
+
+            // Bind result variables
+            $stmt -> bind_result($id, $chapterMenuName, $chapterId, $chapterName);
+
+            $chaptersMenu = array();
+            // Fetch value
+            while ($stmt->fetch()) {
+                $chaptersMenu[] = new ChapterMenu(
+                    $id,
+                    $chapterMenuName,
+                    $chapterId,
+                    $chapterName
+                );
+            }
+            // Close statement
+            $stmt -> close();
+            $this->conn->close();
+
+            return $chaptersMenu;
+        }
+        else{
+            $message = "Ooopps! Something gone wrong!";
+            return $message;
+        }
+    }
+
 // Create Chapter Menu
 	public function createChapterMenu($chapterMenuName, $chapterId, $chapterName){
 		$conf = new Config();
@@ -399,6 +448,56 @@ class Model{
 		$stmt = $this->conn -> stmt_init();
 
 		if ($stmt -> prepare("SELECT * FROM `subMenu`")) {
+			// Execute query
+			$stmt -> execute();
+
+			// Bind result variables
+			$stmt -> bind_result($id, $subMenuName, $menuId, $menuName, $chapterName);
+
+			$chapterSubMenu = array();
+			// Fetch value
+			while ($stmt->fetch()) {
+				$chapterSubMenu[] = new ChapterSubMenu(
+					$id,
+					$subMenuName,
+					$menuId,
+					$menuName,
+					$chapterName
+				);
+			}
+			// Close statement
+			$stmt -> close();
+			$this->conn->close();
+
+			return $chapterSubMenu;
+		}
+		else{
+			$message = "Ooopps! Something gone wrong!";
+			return $message;
+		}
+	}
+
+	public function getAllChaptersSubMenuByMenuId($id){
+		$conf = new Config();
+
+		$this->conn = new mysqli(
+			$conf->getHost(),
+			$conf->getUserName(),
+			$conf->getUserPass(),
+			$conf->getDBName()
+		);
+		// Check connection
+		if ($this->conn->connect_error) {
+			$this->conn->close();
+			return "Connection failed";
+		}
+
+		$stmt = $this->conn -> stmt_init();
+
+		if ($stmt -> prepare("SELECT * FROM `subMenu` WHERE menuId = ?")) {
+
+			$stmt -> bind_param("i", $id);
+
 			// Execute query
 			$stmt -> execute();
 

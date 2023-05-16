@@ -40,9 +40,39 @@ class Controller
           $view->loginPanel(false);
         break;
         case 'chapter':
-          $id = $_POST['id'];
+          $chapterId = $_POST['chapterId'];
+          $menus = $model->getAllChaptersMenuByChapterId($chapterId);
+          $navComponents  = array();
 
-          $view->chapterContentPage();
+          foreach ($menus as $menu){
+            $subMenu =$model->getAllChaptersSubMenuByMenuId($menu->getId());
+            $navComponents[$menu->getChapterMenuName()] = $subMenu;
+          }
+
+//          foreach ($navComponents as $key => $subMenus) {
+//            echo $key . ': ' ;
+//            foreach ($subMenus as $subMenu){
+//              echo $subMenu->getId();
+//            }
+//          }
+
+          $subMenuWords = array();
+          $view->chapterContentPage($navComponents, $subMenuWords, $chapterId);
+          break;
+        case "wordsBySubMenu":
+          $subMenuId = $_POST['subMenuId'];
+          $chapterId = $_POST['chapterId'];
+
+          $subMenuWords = $model->getWordsBySubMenuId($subMenuId);
+
+          $menus = $model->getAllChaptersMenuByChapterId($chapterId);
+          $navComponents  = array();
+
+          foreach ($menus as $menu){
+            $subMenu =$model->getAllChaptersSubMenuByMenuId($menu->getId());
+            $navComponents[$menu->getChapterMenuName()] = $subMenu;
+          }
+
           break;
 
 
