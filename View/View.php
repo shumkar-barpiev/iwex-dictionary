@@ -32,6 +32,7 @@
 					<div class="col-lg-4">
 						<form  action="index.php?page=chapter" method="post" enctype="multipart/form-data">
 							<input type="hidden" name="chapterId" value="<?php echo $chapter->getId(); ?>">
+							<input type="hidden" name="chapterName" value="<?php echo $chapter->getChapterName(); ?>">
 							<button class="card" type="submit">
 								<img src="./Controller/chapterUploads/<?php echo $chapter->getImageUrl();?>" class="card-img-top object-fit-cover" alt="<?php $chapter->getImageUrl();?>" style="object-fit: cover; height:270px;">
 								<div class="card-body">
@@ -59,7 +60,7 @@
 	$this->importFoot();
 }
 
-	public function chapterContentPage($navComponents, $subMenuWords, $chapterId){
+	public function chapterContentPage($navComponents, $subMenuWords, $chapterId, $chapterName, $breadCrambMenu){
 		$this->importHead();
 
 ?>
@@ -112,6 +113,7 @@
 											<form method="post" action = "index.php?page=wordsBySubMenu">
 												<input type="hidden" name="subMenuId" value="<?php echo $subMenu->getId();?>">
 												<input type="hidden" name="chapterId" value="<?php echo $chapterId;?>">
+												<input type="hidden" name="chapterName" value="<?php echo $chapterName; ?>">
 												<button class="dropdown-item"  type="submit"><?php echo $subMenu->getSubMenuName();?></button>
 											</form>
 
@@ -131,22 +133,27 @@
 
 				<main class="col-md-9 ms-sm-auto col-lg-9 px-md-4">
 					<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-						<h1 class="h2">Menu 1.1</h1>
+						<h1 class="h2"><?php echo $chapterName;?></h1>
+
+
+						<?php echo $breadCrambMenu;?>
+
 					</div>
 					<?php if (count($subMenuWords) > 0){
 
-						foreach ($subMenuWords as $words){
+						?> <div style="margin-bottom: 130px;" ><?php
+
+						foreach ($subMenuWords as $word){
 						?>
 							<div class="card mb-3" style="max-width: 740px; margin: auto;">
 								<div class="row g-0">
 									<div class="col-md-4">
-										<img src="./View/Template/assets/images/kapusta1.jpg" class="img-fluid rounded-start" alt="...">
+										<img src="./Controller/wordUploads/<?php echo $word->getWordImage();?>" class="img-fluid rounded-start" alt="<?php echo $word->getWordImage();?>"  style="object-fit: cover; height:180px;">
 									</div>
 									<div class="col-md-8">
 										<div class="card-body">
-											<h5 class="card-title">Card title</h5>
-											<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-											<p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+											<h5 class="card-title"> <?php echo $word->getGermanWord()."\t-\t".$word->getRussianWord();?></h5>
+											<p class="card-text"><?php echo $word->getDescriptionOfWord();?></p>
 										</div>
 									</div>
 								</div>
@@ -155,20 +162,22 @@
 							<hr style="width: 80%; margin-left:auto; margin-right:auto;">
 
 					<?php }
+
+						?> </div><?php
 						}else{ ?>
 
 						<div class="jumbotron jumbotron-fluid">
 							<div class="container">
-								<h1 class="display-4">Fluid jumbotron</h1>
-								<p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+								<h1 class="display-4">Предупреждение!</h1>
+								<p class="lead">Выберите нужную тему в разделе «Содержание»...</p>
 							</div>
 						</div>
 
 					<?php } ?>
 
 
-					<footer class="footer mt-auto py-3" style="background-color: #ffcc00">
-						<div class="container" style="width: 100%; text-align: center; z-index: 1;">
+					<footer class="footer mt-auto py-2 text-center text-lg-start fixed-bottom" style="background-color: #ffcc00; z-index: 0;">
+						<div class="container" style="width: 100%; text-align: center; z-index: 1; ">
 							<span class="text-body-secondary">Все права защищены © 2023</span><br>
 							<span class="text-body-secondary"> email: office@iwex.info</span>
 						</div>

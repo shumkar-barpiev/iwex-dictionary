@@ -41,8 +41,15 @@ class Controller
         break;
         case 'chapter':
           $chapterId = $_POST['chapterId'];
+          $chapterName =  $_POST['chapterName'];
           $menus = $model->getAllChaptersMenuByChapterId($chapterId);
           $navComponents  = array();
+
+          $breadCrambMenu = '<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item active" aria-current="page">'.$chapterName.'</li>
+							</ol>
+						</nav>';
 
           foreach ($menus as $menu){
             $subMenu =$model->getAllChaptersSubMenuByMenuId($menu->getId());
@@ -57,11 +64,29 @@ class Controller
 //          }
 
           $subMenuWords = array();
-          $view->chapterContentPage($navComponents, $subMenuWords, $chapterId);
+          $view->chapterContentPage($navComponents, $subMenuWords, $chapterId, $chapterName, $breadCrambMenu);
           break;
         case "wordsBySubMenu":
           $subMenuId = $_POST['subMenuId'];
           $chapterId = $_POST['chapterId'];
+
+          $chapterName =$_POST['chapterName'];
+          $breadCrambMenu = '';
+
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+
+          foreach($allChapterSubMenu as $subMenu){
+
+            if($subMenu->getId() == $subMenuId){
+              $breadCrambMenu = '<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+                                <li class="breadcrumb-item" aria-current="page">'.$subMenu->getChapterName().'</li>
+                                <li class="breadcrumb-item" aria-current="page">'.$subMenu->getMenuName().'</li>
+								<li class="breadcrumb-item active" aria-current="page">'.$subMenu->getSubMenuName().'</li>
+							</ol>
+						</nav>';
+            }
+          }
 
           $subMenuWords = $model->getWordsBySubMenuId($subMenuId);
 
@@ -72,6 +97,9 @@ class Controller
             $subMenu =$model->getAllChaptersSubMenuByMenuId($menu->getId());
             $navComponents[$menu->getChapterMenuName()] = $subMenu;
           }
+
+
+          $view->chapterContentPage($navComponents, $subMenuWords, $chapterId, $chapterName,$breadCrambMenu );
 
           break;
 
