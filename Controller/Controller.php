@@ -69,7 +69,7 @@ class Controller
           $imageSize = $_FILES['chapterImage']['size'];
 
           if ($imageSize > 3000000){ // surot olchomu 3 MB'tan kop bolboshu kerek
-            $warningMessage = "Size of image out of range!";
+            $warningMessage = "Сүрөттүн өлчөмү чоң. Файлдын өлчөмү 3 МБ'тан ашпашы керек!";
             $view->adminPanel(true, $warningMessage);
           }else{
             // Check if the file is an image
@@ -84,10 +84,10 @@ class Controller
               $model->createChapter($chapterTitle, $new_img_name);
               move_uploaded_file($imageTmp, $img_upload_path);
 
-              $warningMessage =  'Chapter created successfully!';
+              $warningMessage =  'Бөлүм ийгиликтүү түзүлдү!!!';
               $view->adminPanel(true, $warningMessage);
             } else {
-              $warningMessage = "Invalid file type. Please upload an image file.";
+              $warningMessage = "Файлдын тиби туура келбейт. Туура типтеги сүрөт киргизиниз!(png, jpeg, jpg).";
               $view->adminPanel(true, $warningMessage);
             }
           }
@@ -134,7 +134,7 @@ class Controller
                   $warningMessage = 'Бөлүм ийгиликтүү жаңыртылды!';
                   $view->adminPanel(true, $warningMessage);
                 } else {
-                  $warningMessage = "Катачылык 1 кетти!";
+                  $warningMessage = "Катачылык кетти!";
                   $view->adminPanel(true, $warningMessage);
                 }
               } else {
@@ -144,7 +144,7 @@ class Controller
             }
 
           } else {
-            $warningMessage = "Катачылык 2 кетти!";
+            $warningMessage = "Катачылык кетти!";
             $view->adminPanel(true, $warningMessage);
           }
 
@@ -314,21 +314,172 @@ class Controller
 
 
 //          WORD PART
-        case "allWords":
+        case "allWordsOfSubMenu":
           $subMenuId = $_POST['subMenu'];
           echo $subMenuId;
           echo "all chapters";
           break;
+        case "allWords":
+          $allWords = $model->getAllWords();
+          $view->allWords($allWords);
+          break;
         case "createWordForm":
           $allChapterSubMenu = $model->getAllChaptersSubMenu();
-
           $view->createWord($allChapterSubMenu);
           break;
         case "createWord":
-          echo "all chapters";
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+          $germanWord = $_POST["germanWord"];
+          $russianWord = $_POST["russianWord"];
+          $description = $_POST["description"];
+          $subMenuId = $_POST["subMenuSelect"];
+          $chapterName = "";
+          $menuName = "";
+          $subMenuName = "";
+
+          foreach ($allChapterSubMenu as $subMenu) {
+            if( $subMenu->getId() == $subMenuId){
+              $chapterName = $subMenu->getChapterName();
+              $menuName = $subMenu->getMenuName();
+              $subMenuName = $subMenu->getSubMenuName();
+              break;
+            }
+          }
+
+          $imageName = $_FILES['wordImage']['name'];
+          $imageTmp = $_FILES['wordImage']['tmp_name'];
+          $imageType = $_FILES['wordImage']['type'];
+          $imageSize = $_FILES['wordImage']['size'];
+
+          if ($imageSize > 3000000){ // surot olchomu 3 MB'tan kop bolboshu kerek
+            $warningMessage = "Сүрөттүн өлчөмү чоң. Файлдын өлчөмү 3 МБ'тан ашпашы керек!";
+            $view->adminPanel(true, $warningMessage);
+          }else{
+            // Check if the file is an image
+            if ($imageType == 'image/jpeg' || $imageType == 'image/png' ||  $imageType == 'image/jpg'){
+              $img_ex = pathinfo($imageName, PATHINFO_EXTENSION);
+              $img_ex_lc = strtolower($img_ex);
+
+              $new_img_name = uniqid("IMG-", true).'.'.$img_ex_lc;
+              $img_upload_path = dirname(__FILE__) . "/wordUploads/".$new_img_name;
+//              echo $img_upload_path;
+
+              $model->createWord($subMenuId , $new_img_name, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName);
+              move_uploaded_file($imageTmp, $img_upload_path);
+
+              $warningMessage =  'Сөздүк ийгиликтүү түзүлдү!!!';
+              $view->adminPanel(true, $warningMessage);
+            } else {
+              $warningMessage = "Файлдын тиби туура келбейт. Туура типтеги сүрөт киргизиниз!(png, jpeg, jpg).";
+              $view->adminPanel(true, $warningMessage);
+            }
+          }
+
           break;
+        case "updateWordForm":
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+
+          $wordId = $_POST["wordId"];
+          $subMenuId = $_POST["chapterSubMenuId"];
+          $imageName = $_POST["wordImage"];
+          $germanWord = $_POST["germanWord"];
+          $russianWord = $_POST["russianWord"];
+          $description = $_POST["description"];
+
+          $view->updateWord($wordId, $subMenuId , $imageName, $germanWord, $russianWord, $description, $allChapterSubMenu);
+          break;
+        case "updateWord":
+          $allChapterSubMenu = $model->getAllChaptersSubMenu();
+          $germanWord = $_POST["germanWord"];
+          $russianWord = $_POST["russianWord"];
+          $description = $_POST["description"];
+          $subMenuId = $_POST["subMenuSelect"];
+          $chapterName = "";
+          $menuName = "";
+          $subMenuName = "";
+
+          foreach ($allChapterSubMenu as $subMenu) {
+            if( $subMenu->getId() == $subMenuId){
+              $chapterName = $subMenu->getChapterName();
+              $menuName = $subMenu->getMenuName();
+              $subMenuName = $subMenu->getSubMenuName();
+              break;
+            }
+          }
 
 
+          $wordId = $_POST['wordId'];
+          $oldImageName = $_POST['oldWordImage'];
+
+          $file_path = './Controller/wordUploads/'.$oldImageName; // Replace with the path to your image file
+
+          if (file_exists($file_path)) {
+
+            $imageName = $_FILES['wordImage']['name'];
+            $imageTmp = $_FILES['wordImage']['tmp_name'];
+            $imageType = $_FILES['wordImage']['type'];
+            $imageSize = $_FILES['wordImage']['size'];
+
+            if ($imageSize > 3000000){ // surot olchomu 3 MB'tan kop bolboshu kerek
+              $warningMessage = "Сүрөттүн өлчөмү чоң, 3 МБ'тан ашпашы керек!";
+              $view->adminPanel(true, $warningMessage);
+            }else {
+              // Check if the file is an image
+              if ($imageType == 'image/jpeg' || $imageType == 'image/png' || $imageType == 'image/jpg') {
+
+                if (unlink($file_path)) {
+                  $img_ex = pathinfo($imageName, PATHINFO_EXTENSION);
+                  $img_ex_lc = strtolower($img_ex);
+
+                  $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
+                  $img_upload_path = dirname(__FILE__) . "/wordUploads/" . $new_img_name;
+//              echo $img_upload_path;
+
+                  $model->updateWord($wordId, $subMenuId , $new_img_name, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName);
+                  move_uploaded_file($imageTmp, $img_upload_path);
+
+                  $warningMessage = 'Сөздүк ийгиликтүү жаңыртылды!';
+                  $view->adminPanel(true, $warningMessage);
+                } else {
+                  $warningMessage = "Катачылык кетти!";
+                  $view->adminPanel(true, $warningMessage);
+                }
+              } else {
+                $warningMessage = "Файлдын тиби туура эмес. Сүрөт тибиндеги файлдарды киргизиңиз! (jpg, jpeg, png)";
+                $view->adminPanel(true, $warningMessage);
+              }
+            }
+
+          } else {
+            $warningMessage = "Катачылык кетти!";
+            $view->adminPanel(true, $warningMessage);
+          }
+
+
+
+          break;
+        case "deleteWord":
+          $wordId = $_POST['wordId'];
+          $imageName = $_POST['imageName'];
+
+          $file_path = './Controller/wordUploads/'.$imageName; // Replace with the path to your image file
+
+          if (file_exists($file_path)) {
+            if (unlink($file_path)) {
+              $model->deleteWord($wordId);
+
+              $allWords = $model->getAllWords();
+              $view->allWords($allWords);
+            } else {
+              $warningMessage = "Файлды өчүрүү катасы кетти!";
+              $view->adminPanel(true, $warningMessage);
+            }
+          } else {
+            $warningMessage = "Катачылык кетти!";
+            $view->adminPanel(true, $warningMessage);
+          }
+
+          break;
 
 //          DEFAULT
         default:

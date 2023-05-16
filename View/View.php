@@ -925,48 +925,123 @@
 
 
 //	****************** WORD PART  START ******************* //
-	public function allWords(){
+	public function allWords($allWords){
 		$this->importHead();
 		$this->importAdminNavigationBar();
 		?>
 
 		<div class="container-fluid " >
 			<div class="row">
-				<div class="col-lg-9 mx-auto pt-5">
+				<div class="col-lg-10 mx-auto pt-5">
 					<table class="table">
 						<thead>
 						<tr>
-							<th scope="col">#</th>
-							<th scope="col">First</th>
-							<th scope="col">Last</th>
-							<th scope="col">Handle</th>
+							<th scope="col">id</th>
+							<th scope="col">Image</th>
+							<th scope="col">German</th>
+							<th scope="col">Russian</th>
+							<th scope="col">Description</th>
+							<th scope="col">Chapter</th>
+							<th scope="col">Menu</th>
+							<th scope="col">Sub Menu</th>
+
+							<th scope="col">Update</th>
+							<th scope="col">Delete</th>
 						</tr>
 						</thead>
 						<tbody class="table-group-divider">
+
+						<?php  foreach ($allWords as $word) { ?>
 						<tr>
-							<th scope="row">1</th>
-							<td>Mark</td>
-							<td>Otto</td>
-							<td>@mdo</td>
+							<th scope="row"><?php  echo $word->getId(); ?></th>
+							<td>
+								<img src="./Controller/wordUploads/<?php echo $word->getWordImage();?>" class="object-fit-cover rounded mx-auto" alt="<?php echo $word->getWordImage();?>" style="width: 150px; height: 100px;">
+							</td>
+							<td><?php  echo $word->getGermanWord(); ?></td>
+							<td><?php  echo $word->getRussianWord(); ?></td>
+							<td><?php  echo $word->getDescriptionOfWord(); ?></td>
+							<td><?php  echo $word->getChapterName(); ?></td>
+							<td><?php  echo $word->getMenuName(); ?></td>
+							<td><?php  echo $word->getSubMenuName(); ?></td>
+
+							<td>
+								<button type='button' class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update<?php echo $word->getId(); ?>">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+									</svg>
+								</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#delete<?php echo $word->getId(); ?>">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+										<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+									</svg>
+								</button>
+							</td>
 						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Jacob</td>
-							<td>Thornton</td>
-							<td>@fat</td>
-						</tr>
+
+
+
+						<!-- Modal delete -->
+						<div class="modal fade" id="delete<?php echo $word->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="exampleModalLabel">Эскертүү!!!</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										Өчүрүлгөн маалыматтар кайра калыбына келтирилбейт. Чын эле өчүрүүнү каалап жатасызбы?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+										<form action='index.php?page=deleteWord' method='post'>
+											<input type='hidden' name='wordId' value='<?php echo $word->getId();?>'>
+											<input type='hidden' name='imageName' value='<?php echo $word->getWordImage();?>'>
+											<button type="submit" class="btn btn-danger">Удалить</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<!-- Modal update -->
+						<div class="modal fade" id="update<?php echo $word->getId(); ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h1 class="modal-title fs-5" id="exampleModalLabel">Эскертүү!!!</h1>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										Бул сөздүктүн маалыматтарын жаңыртууну каалайсызбы?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+										<form action='index.php?page=updateWordForm' method='post'>
+
+											<input type='hidden' name='wordId' value='<?php echo $word->getId();?>'>
+											<input type='hidden' name='chapterSubMenuId' value='<?php echo $word->getSubMenuId();?>'>
+											<input type='hidden' name='wordImage' value='<?php echo $word->getWordImage();?>'>
+
+											<input type='hidden' name='germanWord' value='<?php echo $word->getGermanWord();?>'>
+											<input type='hidden' name='russianWord' value='<?php echo $word->getRussianWord();?>'>
+											<input type='hidden' name='description' value='<?php echo $word->getDescriptionOfWord();?>'>
+
+											<button type="submit" class="btn btn-primary">Дальше</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+						<?php } ?>
 
 						</tbody>
 					</table>
@@ -997,14 +1072,14 @@
 						</div>
 						<div class="input-group mb-3">
 							<div class="form-floating">
-								<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+								<textarea class="form-control" name = "description" placeholder="Please, write description of word" id="floatingTextarea2" style="height: 100px"></textarea>
 								<label for="floatingTextarea2">Сөздүн түшүндүрмөсүн жазыңыз...</label>
 							</div>
 						</div>
 						<div class="input-group mb-3">
 
 							<div class="form-floating">
-								<select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+								<select name ="subMenuSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example">
 									<?php  foreach ($allChapterSubMenu as $chapterSubMenu) { ?>
 										<option value="<?php echo $chapterSubMenu->getId();?>"><?php echo $chapterSubMenu->getSubMenuName();?></option>
 									<?php }?>
@@ -1025,7 +1100,63 @@
 		$this->importFoot();
 
 	}
-	public function updateWord(){}
+	public function updateWord($id, $subMenuId , $wordImage, $germanWord, $russianWord, $description, $allChapterSubmenu){
+
+		$this->importHead();
+		$this->importAdminNavigationBar();
+		?>
+		<div class="container-fluid " >
+			<div class="row">
+				<div class="col-lg-6 mx-auto pt-5">
+					<h1 class="mb-5">Сөздүктү жаңыртуу</h1>
+
+					<form class="form-floating" method="post" action="index.php?page=updateWord" enctype="multipart/form-data">
+						<div class="input-group mb-3">
+							<span class="input-group-text" >German</span>
+							<input type="text" class="form-control" name="germanWord" placeholder="Сөздүн немисче мааниси..." value = "<?php echo $germanWord; ?>" required>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text" >Russian</span>
+							<input type="text" class="form-control" name="russianWord" placeholder="Сөздүн орусча мааниси..." value = "<?php echo $russianWord; ?>" required>
+						</div>
+						<div class="input-group mb-3">
+							<div class="form-floating">
+								<textarea class="form-control" name = "description" placeholder="Please, write description of word" id="floatingTextarea2" style="height: 100px"><?php echo $description; ?></textarea>
+								<label for="floatingTextarea2">Сөздүн түшүндүрмөсүн жазыңыз...</label>
+							</div>
+						</div>
+						<div class="input-group mb-3">
+
+							<div class="form-floating">
+								<select name ="subMenuSelect" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+									<?php  foreach ($allChapterSubmenu as $chapterSubMenu) {
+
+										if ($chapterSubMenu->getId() == $subMenuId){ ?>
+											<option value="<?php echo $chapterSubMenu->getId();?>" selected><?php echo $chapterSubMenu->getSubMenuName();?></option>
+										<?php } else{ ?>
+											<option value="<?php echo $chapterSubMenu->getId();?>" ><?php echo $chapterSubMenu->getSubMenuName();?></option>
+											<?php
+										}
+									}?>
+								</select>
+								<label for="floatingSelect">Кайсы подтемага таандык экендигин тандаңыз :</label>
+							</div>
+						</div>
+						<div class="input-group">
+							<input type="file" class="form-control" id="inputGroupFile04" name="wordImage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required>
+							<input type='hidden' name='wordId' value='<?php echo $id;?>'>
+							<input type='hidden' name='oldWordImage' value='<?php echo $wordImage;?>'>
+							<button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Жаңыртуу</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<?php
+		$this->importFoot();
+
+	}
 
 //	****************** WORD PART END ******************* //
 

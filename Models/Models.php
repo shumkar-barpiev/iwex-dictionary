@@ -553,12 +553,13 @@ class Model{
 
         $stmt = $this->conn -> stmt_init();
 
-        if ($stmt -> prepare("SELECT * FROM `dictionaryWords`;")) {
+        if ($stmt -> prepare("SELECT * FROM `dictionaryWords`")) {
             // Execute query
             $stmt -> execute();
 
             // Bind result variables
             $stmt -> bind_result($id, $subMenuId , $wordImage, $germanWord, $russianWord, $description, $chapterName, $menuName, $subMenuName);
+
 
             $allWords = array();
             // Fetch value
