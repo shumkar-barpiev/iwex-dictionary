@@ -211,6 +211,43 @@ class Controller
           $chapterId = $_POST['chapterID'];
           $imageName = $_POST['imageUrl'];
 
+          $menus =  $model->getAllChaptersMenuByChapterId($chapterId);
+
+          foreach ($menus as $menu ){
+            $subMenus = $model->getAllChaptersSubMenuByMenuId($menu->getId());
+
+            foreach ($subMenus as $subMenu){
+              $allWords = $model->getWordsBySubMenuId($subMenu->getId());
+
+              foreach ($allWords as $word){
+                $wordId = $word->getId();
+                $wordImageName = $word->getWordImage();
+
+                $file_path = './Controller/wordUploads/'.$wordImageName; // Replace with the path to your image file
+
+                if (file_exists($file_path)) {
+                  if (unlink($file_path)) {
+                    $model->deleteWord($wordId);
+                  } else {
+                    $warningMessage = "Файлды өчүрүү катасы кетти!";
+                    $view->adminPanel(true, $warningMessage);
+                  }
+                } else {
+                  $warningMessage = "Катачылык кетти!";
+                  $view->adminPanel(true, $warningMessage);
+                }
+              }
+            }
+            foreach($subMenus as $subMenu){
+              $model->deleteChapterSubMenu($subMenu->getId());
+            }
+          }
+
+          foreach($menus as $menu){
+            $model->deleteChapterMenu($menu->getId());
+          }
+
+
           $file_path = './Controller/chapterUploads/'.$imageName; // Replace with the path to your image file
 
           if (file_exists($file_path)) {
@@ -288,6 +325,34 @@ class Controller
         case "deleteChapterMenu":
           $chapterMenuId = $_POST['chapterMenuId'];
 
+          $subMenus = $model->getAllChaptersSubMenuByMenuId($chapterMenuId);
+
+          foreach ($subMenus as $subMenu){
+            $allWords = $model->getWordsBySubMenuId($subMenu->getId());
+
+            foreach ($allWords as $word){
+              $wordId = $word->getId();
+              $wordImageName = $word->getWordImage();
+
+              $file_path = './Controller/wordUploads/'.$wordImageName; // Replace with the path to your image file
+
+              if (file_exists($file_path)) {
+                if (unlink($file_path)) {
+                  $model->deleteWord($wordId);
+                } else {
+                  $warningMessage = "Файлды өчүрүү катасы кетти!";
+                  $view->adminPanel(true, $warningMessage);
+                }
+              } else {
+                $warningMessage = "Катачылык кетти!";
+                $view->adminPanel(true, $warningMessage);
+              }
+            }
+          }
+          foreach($subMenus as $subMenu){
+            $model->deleteChapterSubMenu($subMenu->getId());
+          }
+
           $model->deleteChapterMenu($chapterMenuId);
           $allChaptersMenu = $model->getAllChaptersMenu();
           $view->allChaptersMenu($allChaptersMenu);
@@ -363,6 +428,27 @@ class Controller
           break;
         case "deleteChapterSubMenu":
           $subMenuId = $_POST['chapterSubMenuId'];
+
+          $allWords = $model->getWordsBySubMenuId($subMenuId);
+
+          foreach ($allWords as $word){
+            $wordId = $word->getId();
+            $wordImageName = $word->getWordImage();
+
+            $file_path = './Controller/wordUploads/'.$wordImageName; // Replace with the path to your image file
+
+            if (file_exists($file_path)) {
+              if (unlink($file_path)) {
+                $model->deleteWord($wordId);
+              } else {
+                $warningMessage = "Файлды өчүрүү катасы кетти!";
+                $view->adminPanel(true, $warningMessage);
+              }
+            } else {
+              $warningMessage = "Катачылык кетти!";
+              $view->adminPanel(true, $warningMessage);
+            }
+          }
 
           $model->deleteChapterSubMenu($subMenuId);
 
